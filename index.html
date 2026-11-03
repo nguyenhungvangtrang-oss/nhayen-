@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#102b25">
+    <title>HUVATRA | Dashboard quản lý nhà Yến</title>
+    <style>
+        :root{--bg:#f3f6f3;--card:#fff;--ink:#172b25;--muted:#718078;--line:#e5ece7;--green:#176b50;--green2:#dff2e8;--gold:#c99a43;--red:#c65d54;--shadow:0 8px 28px rgba(22,53,40,.07)}
+        *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+        header{background:linear-gradient(115deg,#102b25,#1b5943);color:#fff;padding:25px clamp(18px,4vw,48px) 30px}
+        .top{max-width:1440px;margin:auto;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+        .brand{display:flex;gap:13px;align-items:center}.logo{width:46px;height:46px;border:1px solid #ffffff55;border-radius:14px;display:grid;place-items:center;font-weight:900;color:#f1d18b;font-size:18px}
+        h1{font-size:clamp(22px,3vw,32px);margin:0;letter-spacing:.2px}.sub{color:#c5d8ce;margin-top:4px;font-size:13px}
+        .status{border:1px solid #ffffff40;border-radius:30px;padding:8px 13px;font-size:12px;color:#e9f5ed}
+        main{max-width:1440px;margin:0 auto;padding:24px clamp(14px,3vw,38px) 50px}
+        .toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+        .toolbar h2{font-size:18px;margin:0}.toolbar p{margin:3px 0 0;color:var(--muted);font-size:13px}
+        .actions{display:flex;gap:8px;flex-wrap:wrap}button,.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:650;cursor:pointer;font-size:13px}
+        .primary{background:var(--green);color:#fff}.soft{background:#e7efe9;color:var(--green)}.outline{background:#fff;border:1px solid var(--line);color:var(--ink)}
+        .grid{display:grid;gap:15px}.kpis{grid-template-columns:repeat(5,minmax(0,1fr));margin-bottom:16px}
+        .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:17px;box-shadow:var(--shadow);min-width:0}
+        .kpi-label{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:8px}.kpi-value{font-size:clamp(21px,2.5vw,29px);font-weight:800;letter-spacing:-.7px;margin:9px 0 3px}.kpi-foot{font-size:11px;color:var(--muted)}
+        .dot{width:8px;height:8px;border-radius:50%;display:inline-block;background:var(--green);margin-right:5px}.dot.gold{background:var(--gold)}.dot.red{background:var(--red)}
+        .main-grid{grid-template-columns:1.35fr 1fr;margin-bottom:16px}.chart-title{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}.chart-title h3,.card h3{font-size:15px;margin:0}.chart-title p{font-size:12px;color:var(--muted);margin:3px 0 0}
+        .legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--muted)}.legend span:before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c);margin-right:5px}
+        svg{width:100%;height:auto;display:block;overflow:visible}.chart-wrap{width:100%;min-height:180px}
+        .axis{fill:#87958d;font-size:10px}.gridline{stroke:#e8eee9;stroke-width:1}
+        .line-temp{fill:none;stroke:#d59c42;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+        .line-hum{fill:none;stroke:#3486a0;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+        .bottom-grid{grid-template-columns:1fr 1fr 1fr;margin-bottom:16px}
+        .bar-row{display:grid;grid-template-columns:70px 1fr 55px;gap:10px;align-items:center;margin:14px 0;font-size:12px}
+        .track{height:10px;background:#edf2ee;border-radius:20px;overflow:hidden}
+        .fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#2e8a66,#78bd91)}
+        .cost-list{display:grid;gap:12px;margin-top:15px}.cost-item{display:flex;justify-content:space-between;gap:10px;font-size:12px}.cost-item strong{font-size:12px}
+        .form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+        .field label{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:#53645b;margin-bottom:7px}.field output{font-weight:750;color:var(--green)}
+        input[type=range]{width:100%;accent-color:var(--green);cursor:pointer}
+        input[type=number]{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px;font:inherit;color:var(--ink);background:#fbfdfb}
+        .field small{display:block;color:#8a978f;font-size:10px;margin-top:4px}
+        .sim-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.sim-head p{font-size:12px;color:var(--muted);margin:4px 0 0}
+        .result-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+        .result{background:#f5f8f5;border-radius:12px;padding:13px}.result span{display:block;font-size:11px;color:var(--muted)}.result strong{display:block;font-size:18px;margin-top:5px}
+        .notice{background:#fff8e9;border:1px solid #f0dfb9;color:#765b25;padding:12px 14px;border-radius:12px;font-size:12px;margin:16px 0}
+        .table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap}
+        th,td{text-align:left;padding:11px 10px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-weight:650;background:#fafcfb}
+        footer{text-align:center;color:#89958e;font-size:11px;padding:10px}
+        @media(max-width:1050px){.kpis{grid-template-columns:repeat(3,1fr)}.main-grid{grid-template-columns:1fr 1fr}.bottom-grid{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:repeat(2,1fr)}}
+        @media(max-width:680px){header{padding:20px 16px}.kpis{grid-template-columns:repeat(2,1fr)}.main-grid,.bottom-grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.result-grid{grid-template-columns:repeat(2,1fr)}.card{padding:14px}.kpi-value{font-size:22px}}
+    </style>
+</head>
+<body>
+    <header>
+        <div class="top">
+            <div class="brand">
+                <div class="logo">HV</div>
+                <div>
+                    <h1>HUVATRA · QUẢN LÝ NHÀ YẾN</h1>
+                    <div class="sub">Bảng điều hành vận hành · sản lượng · tài chính</div>
+                </div>
+            </div>
+            <div class="status"><span class="dot"></span> BẢN MẪU MÔ PHỎNG · DỮ LIỆU CÓ THỂ CHỈNH SỬA</div>
+        </div>
+    </header>
+
+    <main>
+        <section class="toolbar">
+            <div>
+                <h2>Tổng quan hoạt động</h2>
+                <p id="today"></p>
+            </div>
+            <div class="actions">
+                <button class="soft" id="resetBtn">Khôi phục số liệu mẫu</button>
+                <button class="primary" id="exportBtn">Xuất báo cáo CSV</button>
+            </div>
+        </section>
+
+        <section class="grid kpis">
+            <div class="card">
+                <div class="kpi-label">Nhiệt độ trung bình <span class="dot gold"></span></div>
+                <div class="kpi-value" id="tempKpi">28,5°C</div>
+                <div class="kpi-foot">Mục tiêu tham khảo: 27–29°C</div>
+            </div>
+            <div class="card">
+                <div class="kpi-label">Độ ẩm trung bình <span class="dot"></span></div>
+                <div class="kpi-value" id="humKpi">78,0%</div>
+                <div class="kpi-foot">Mục tiêu tham khảo: 80–85%</div>
+            </div>
+            <div class="card">
+                <div class="kpi-label">Sản lượng kỳ này</div>
+                <div class="kpi-value" id="yieldKpi">5,4 kg</div>
+                <div class="kpi-foot">Tổng 4 đợt thu hoạch mô phỏng</div>
+            </div>
+            <div class="card">
+                <div class="kpi-label">Doanh thu ước tính</div>
+                <div class="kpi-value" id="revenueKpi">97,2 tr</div>
+                <div class="kpi-foot">Sản lượng × giá bán bình quân</div>
+            </div>
+            <div class="card">
+                <div class="kpi-label">Lợi nhuận vận hành</div>
+                <div class="kpi-value" id="profitKpi">91,2 tr</div>
+                <div class="kpi-foot">Doanh thu − chi phí vận hành</div>
+            </div>
+        </section>
+
+        <section class="grid main-grid">
+            <div class="card">
+                <div class="chart-title">
+                    <div>
+                        <h3>Diễn biến môi trường nhà Yến</h3>
+                        <p>Nhiệt độ và độ ẩm trung bình theo tuần</p>
+                    </div>
+                    <div class="legend">
+                        <span style="--c:#d59c42">Nhiệt độ °C</span>
+                        <span style="--c:#3486a0">Độ ẩm %</span>
+                    </div>
+                </div>
+                <div class="chart-wrap">
+                    <svg id="envChart" viewBox="0 0 620 245" role="img" aria-label="Biểu đồ nhiệt độ và độ ẩm"></svg>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="chart-title">
+                    <div>
+                        <h3>Sản lượng thu hoạch</h3>
+                        <p>Khối lượng tổ yến theo tháng (kg)</p>
+                    </div>
+                </div>
+                <div class="chart-wrap">
+                    <svg id="yieldChart" viewBox="0 0 500 245" role="img" aria-label="Biểu đồ sản lượng thu hoạch"></svg>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid bottom-grid">
+            <div class="card">
+                <h3>Cơ cấu chi phí vận hành</h3>
+                <p style="font-size:12px;color:var(--muted);margin:4px 0 10px">Phân bổ chi phí trong kỳ mô phỏng</p>
+                <div id="costBars"></div>
+                <div class="cost-list">
+                    <div class="cost-item">
+                        <span>Tổng chi phí</span>
+                        <strong id="costTotal">6.000.000 ₫</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Hiệu quả kinh doanh</h3>
+                <p style="font-size:12px;color:var(--muted);margin:4px 0 12px">Tính theo số liệu đang nhập</p>
+                <div class="result" style="margin-bottom:10px">
+                    <span>Biên lợi nhuận vận hành</span>
+                    <strong id="marginKpi">93,8%</strong>
+                </div>
+                <div class="result">
+                    <span>Giá hòa vốn / kg</span>
+                    <strong id="breakEven">1,11 tr ₫</strong>
+                </div>
+                <p style="font-size:11px;color:var(--muted);margin:12px 0 0">Chưa bao gồm khấu hao xây dựng, lãi vay, thuế và chi phí đầu tư ban đầu.</p>
+            </div>
+
+            <div class="card">
+                <h3>Trạng thái môi trường</h3>
+                <p style="font-size:12px;color:var(--muted);margin:4px 0 12px">Đối chiếu ngưỡng tham khảo do người vận hành thiết lập</p>
+                <div id="envStatus" style="display:grid;gap:12px"></div>
+            </div>
+        </section>
+
+        <section class="card" style="margin-bottom:16px">
+            <div class="sim-head">
+                <div>
+                    <h3>Bộ mô phỏng số liệu trực tiếp</h3>
+                    <p>Thay đổi thông số bên dưới để biểu đồ và kết quả tự cập nhật.</p>
+                </div>
+                <button class="outline" id="sampleBtn">Nạp bộ số liệu mẫu</button>
+            </div>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label for="temp">Nhiệt độ trung bình <output id="tempOut">28,5°C</output></label>
+                    <input id="temp" type="range" min="24" max="34" step=".1" value="28.5">
+                    <small>Đơn vị °C · mục tiêu tham khảo 27–29°C</small>
+                </div>
+                <div class="field">
+                    <label for="hum">Độ ẩm trung bình <output id="humOut">78%</output></label>
+                    <input id="hum" type="range" min="55" max="95" step="1" value="78">
+                    <small>Đơn vị % · mục tiêu tham khảo 80–85%</small>
+                </div>
+                <div class="
